@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的主页</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #0a0a0a;
+      color: #e0e0e0;
+      font-family: "Courier New", monospace;
+    }
+
+    .container {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .typing {
+      font-size: 2rem;
+      min-height: 3rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1.2em;
+      background: #00ff88;
+      margin-left: 2px;
+      vertical-align: text-bottom;
+      animation: blink 0.8s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: #666;
+      opacity: 0;
+      transition: opacity 1s;
+    }
+
+    .subtitle.show {
+      opacity: 1;
+    }
+
+    .btn {
+      margin-top: 2rem;
+      padding: 0.8rem 2rem;
+      border: 1px solid #00ff88;
+      background: transparent;
+      color: #00ff88;
+      font-family: inherit;
+      font-size: 1rem;
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.3s;
+    }
+
+    .btn.show {
+      opacity: 1;
+    }
+
+    .btn:hover {
+      background: #00ff88;
+      color: #0a0a0a;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="typing">
+      <span id="text"></span><span class="cursor"></span>
+    </div>
+    <p class="subtitle" id="subtitle">一个正在学习前端的小站</p>
+    <button class="btn" id="btn" onclick="handleClick()">点我看看</button>
+  </div>
+
+  <script>
+    const phrases = [
+      "你好，世界。",
+      "欢迎来到我的小站。",
+      "这里什么都没有。",
+      "也许吧。"
+    ];
+
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    const textEl = document.getElementById("text");
+    const subtitleEl = document.getElementById("subtitle");
+    const btnEl = document.getElementById("btn");
+
+    function type() {
+      const current = phrases[phraseIndex];
+
+      if (!isDeleting) {
+        textEl.textContent = current.substring(0, charIndex + 1);
+        charIndex++;
+
+        if (charIndex === current.length) {
+          if (phraseIndex === phrases.length - 1) {
+            // 最后一句打完，显示副标题和按钮
+            setTimeout(() => subtitleEl.classList.add("show"), 500);
+            setTimeout(() => btnEl.classList.add("show"), 1000);
+            return;
+          }
+          setTimeout(() => { isDeleting = true; type(); }, 1500);
+          return;
+        }
+      } else {
+        textEl.textContent = current.substring(0, charIndex - 1);
+        charIndex--;
+
+        if (charIndex === 0) {
+          isDeleting = false;
+          phraseIndex++;
+        }
+      }
+
+      const speed = isDeleting ? 50 : 120;
+      setTimeout(type, speed);
+    }
+
+    function handleClick() {
+      btnEl.textContent = " 你发现了彩蛋！";
+      btnEl.style.borderColor = "#ff6b6b";
+      btnEl.style.color = "#ff6b6b";
+      document.body.style.background = "#1a0a0a";
+    }
+
+    type();
+  </script>
+</body>
+</html>
