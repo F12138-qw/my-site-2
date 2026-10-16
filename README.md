@@ -1,1 +1,1 @@
-# my-site-2
+# my-site-type game
